@@ -31,6 +31,10 @@ html {
 	font-size: 10px;
 }
 
+.f-55 {
+	font-size: 55px;
+}
+
 .f-grey {
 	color: #616770;
 }	
@@ -187,6 +191,43 @@ html {
 	padding: 12px;
 }
 
+.main {
+	margin-top: 20px;
+	display: flex;
+}
+
+.left-side {
+	width: 200px;
+	padding-left: 25px;
+	margin-right: 10px;
+}
+
+.right-side {
+    width: calc(100% - 200px);
+	padding: 10px;
+	background-color: #193f7e;
+	margin-right: 10px;
+}
+
+.left-side > div {
+    border-bottom: 1px solid #d8dce2;
+    padding: 10px;
+    background-color: #193f7e;
+    cursor: pointer;
+    color: white;
+}
+
+.left-side > div.active {
+    background-color: #0b2043;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.center-container {
+	text-align: center;
+	color: white;
+}
+
 ::-webkit-scrollbar {
   width: 2px;
 }
@@ -217,4 +258,7 @@ html {
 @media only screen and (max-width: 720px) {
 	
 }
+
+
+
 

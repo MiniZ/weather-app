@@ -1,22 +1,37 @@
 document.onreadystatechange = () => {
   if (document.readyState === 'complete') {
-    var xhr = createCORSRequest('GET', "https://api.openweathermap.org/data/2.5/weather?zip=94040,us&appid=327f0c4e1cfb6ac8bf357744e83629d7");
-    if (!xhr) {
-      throw new Error('CORS not supported');
-    }
+	
+	initializeList();
 
-    xhr.onload = function() {
-    var text = xhr.responseText;
-    console.log(text);
-  };
-
-  xhr.onerror = function() {
-    alert('Woops, there was an error making the request.');
-  };
-
-  xhr.send();
   }
 };
+
+function initializeList() {
+	var text = "";
+	for (var i = 0; i < cities.length; i++) {
+		if (i == 0) {
+			text += '<div class="city active">' + cities[i] + "</div>";
+			updateCityWeather(cities[i]);
+			continue;
+		}
+		text += '<div class="city">' + cities[i] + "</div>";
+	}
+	document.getElementById("city-list").innerHTML = text;
+	addEventListenerToCities();
+}
+
+function addEventListenerToCities() {
+	var parent = document.getElementById("city-list");
+	parent.addEventListener('click', function (event) {
+		if (event.target.classList.contains("city")) {
+			[].forEach.call(document.querySelectorAll('.city.active'), function (div) {
+			  div.classList.remove("active");
+			});
+			event.target.classList.add("active");
+			updateCityWeather(event.target.innerHTML);
+		}
+	}, false);
+}
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -41,3 +56,45 @@ function createCORSRequest(method, url) {
   }
   return xhr;
 }
+
+function buildUrlForCurrentCity(city) {
+	return "https://api.openweathermap.org/data/2.5/weather?q=" + city + ",ge&units=metric&appid=327f0c4e1cfb6ac8bf357744e83629d7"
+}
+
+function updateCityWeather(city) {
+	var xhr = createCORSRequest('GET', buildUrlForCurrentCity(city));
+    
+	if (!xhr) {
+      throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function() {
+		var text = xhr.responseText;
+		console.log(text);
+	};
+
+	xhr.onerror = function() {
+		alert('Woops, there was an error making the request.');
+	};
+
+	xhr.send();
+}
+
+var cities = ['Tbilisi',
+				'Marneuli',
+				'Telavi',
+				'Gurjaani',
+				'Zhinvali',
+				'Gori',
+				'Akhalkalaki',
+				'Tskhinvali',
+				'Akhaltsikhe',
+				'Zestaponi',
+				'Kutaisi',
+				'Oni',
+				'Lentekhi',
+				'Dioknisi',
+				'Batumi',
+				'Zugdidi',
+				'Sokhumi'
+				];
