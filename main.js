@@ -27,6 +27,7 @@ function initializeList() {
 			text += '<div class="city active">' + cities[i] + "</div>";
 			updateCityWeather(cities[i]);
 			update5DayWeather(cities[i]);
+			updateHourlyWeather(cities[i]);
 			continue;
 		}
 		text += '<div class="city">' + cities[i] + "</div>";
@@ -45,6 +46,7 @@ function addEventListenerToCities() {
 			event.target.classList.add("active");
 			updateCityWeather(event.target.innerHTML);
 			update5DayWeather(event.target.innerHTML);
+			updateHourlyWeather(event.target.innerHTML);
 		}
 	}, false);
 }
@@ -76,6 +78,10 @@ function buildUrlFor5DayCurrentCity(city) {
 	return "https://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + ",ge&units=metric&appid=327f0c4e1cfb6ac8bf357744e83629d7"
 }
 
+function buildUrlForHourlyCurrentCity(city) {
+	return "https://api.openweathermap.org/data/2.5/forecast?q=" + city + ",ge&units=metric&appid=327f0c4e1cfb6ac8bf357744e83629d7"
+}
+
 function updateCityWeather(city) {
 	var xhr = createCORSRequest('GET', buildUrlForCurrentCity(city));
     
@@ -90,12 +96,40 @@ function updateCityWeather(city) {
 		document.getElementById("feels-temp").innerHTML = weatherObj.main.temp;
 		document.getElementById("main-temp_max").innerHTML = weatherObj.main.temp_max;
 		document.getElementById("main-temp_min").innerHTML = weatherObj.main.temp_min;
-		document.getElementById("weather-main").innerHTML = weatherObj.weather[0].main;
+		document.getElementById("weather-main").innerHTML = weatherObj.weather[0].main + ', ' + weatherObj.weather[0].description;
 		document.getElementById("wind-deg").innerHTML = weatherObj.wind.deg;
 		document.getElementById("wind-speed").innerHTML = weatherObj.wind.speed;
 		setSunPhase(weatherObj.sys.sunrise * 1000, weatherObj.sys.sunset * 1000);
 		setHumidityLevel(weatherObj.main.humidity);
 		
+	};
+
+	xhr.onerror = function() {
+		alert('Woops, there was an error making the request.');
+	};
+
+	xhr.send();
+}
+
+function updateHourlyWeather(city) {
+	var xhr = createCORSRequest('GET', buildUrlForHourlyCurrentCity(city));
+    
+	if (!xhr) {
+      throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function() {
+		var weatherObj = JSON.parse(xhr.responseText);
+		console.log(weatherObj);
+		var data = "";
+		for (var i = 0; i < weatherObj.list.length; i++) {
+			data += '<div class="column" title="' + weatherObj.list[i].dt_txt + '">' + 
+						'<div>' + weatherObj.list[i].dt_txt.split(' ')[1].substr(0, 5) + '</div>' + 
+						'<img src="icons/' + weatherObj.list[i].weather[0].icon + '.svg">' +
+						'<div>' + weatherObj.list[i].main.temp + '&#176;</div>' + 
+					'</div>'
+		}
+		document.getElementById("current-hourly-forecast").innerHTML = data;
 	};
 
 	xhr.onerror = function() {
@@ -114,7 +148,6 @@ function update5DayWeather(city) {
 
     xhr.onload = function() {
 		var weatherObj = JSON.parse(xhr.responseText);
-		console.log(weatherObj);
 		var data = "";
 		var currDate = new Date();
 		for (var i = 0; i < weatherObj.list.length; i++) {
@@ -150,7 +183,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-var cities = ['Tbilisi',
+const cities = ['Tbilisi',
 				'Marneuli',
 				'Telavi',
 				'Gurjaani',
