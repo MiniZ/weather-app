@@ -10,7 +10,7 @@ function setHumidityLevel(perc) {
 	let deg = (perc * 280) / 100
 	var activeBorder = document.getElementById("activeBorder");
 	
-    if (deg<=140){
+    if (deg <= 140){
         activeBorder.style.backgroundImage ='linear-gradient(' + (90+deg) + 'deg, transparent 50%, #A2ECFB 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)';
     }
     else{
@@ -92,11 +92,12 @@ function updateCityWeather(city) {
     xhr.onload = function() {
 		var weatherObj = JSON.parse(xhr.responseText);
 		document.getElementById("curr-city").innerHTML = weatherObj.name;
-		document.getElementById("main-temp").innerHTML = weatherObj.main.temp;
+		document.getElementById("main-temp").innerHTML = parseInt(weatherObj.main.temp);
 		document.getElementById("feels-temp").innerHTML = weatherObj.main.temp;
-		document.getElementById("main-temp_max").innerHTML = weatherObj.main.temp_max;
-		document.getElementById("main-temp_min").innerHTML = weatherObj.main.temp_min;
+		document.getElementById("main-temp_max").innerHTML = parseInt(weatherObj.main.temp_max);
+		document.getElementById("main-temp_min").innerHTML = parseInt(weatherObj.main.temp_min);
 		document.getElementById("weather-main").innerHTML = weatherObj.weather[0].main + ', ' + weatherObj.weather[0].description;
+		document.getElementById("big-animation").innerHTML = bigAnimations[weatherObj.weather[0].icon];
 		document.getElementById("wind-deg").innerHTML = weatherObj.wind.deg;
 		document.getElementById("wind-speed").innerHTML = weatherObj.wind.speed;
 		setSunPhase(weatherObj.sys.sunrise * 1000, weatherObj.sys.sunset * 1000);
@@ -120,13 +121,12 @@ function updateHourlyWeather(city) {
 
     xhr.onload = function() {
 		var weatherObj = JSON.parse(xhr.responseText);
-		console.log(weatherObj);
 		var data = "";
 		for (var i = 0; i < weatherObj.list.length; i++) {
 			data += '<div class="column" title="' + weatherObj.list[i].dt_txt + '">' + 
 						'<div>' + weatherObj.list[i].dt_txt.split(' ')[1].substr(0, 5) + '</div>' + 
 						'<img src="icons/' + weatherObj.list[i].weather[0].icon + '.svg">' +
-						'<div>' + weatherObj.list[i].main.temp + '&#176;</div>' + 
+						'<div>' + parseInt(weatherObj.list[i].main.temp) + '&#176;</div>' + 
 					'</div>'
 		}
 		document.getElementById("current-hourly-forecast").innerHTML = data;
@@ -155,7 +155,7 @@ function update5DayWeather(city) {
 			data += '<div class="row">' + 
 						'<div>' + (monthNames[currDate.getMonth()] + ', ' + currDate.getDate()) + '</div>' + 
 						'<img src="icons/' + weatherObj.list[i].weather[0].icon + '.svg">' +
-						'<div>' + weatherObj.list[i].temp.max + '&#176; / ' + weatherObj.list[i].temp.min + '&#176;</div>' + 
+						'<div>' + parseInt(weatherObj.list[i].temp.max) + '&#176; / ' + parseInt(weatherObj.list[i].temp.min) + '&#176;</div>' + 
 					'</div>'
 		}
 		document.getElementById("five-day-forecast").innerHTML = data;
@@ -201,3 +201,19 @@ const cities = ['Tbilisi',
 				'Zugdidi',
 				'Sokhumi'
 				];
+				
+const bigAnimations = {
+	'02d': '<div id="02d" class="icon sun-shower"><div class="cloud"></div><div class="sun"><div class="rays"></div></div><div class="rain"></div></div>',
+	'11d': '<div id="11d" class="icon thunder-storm"><div class="cloud"></div><div class="lightning"><div class="bolt"></div><div class="bolt"></div></div></div>',
+	'11n': '<div id="11n" class="icon thunder-storm"><div class="cloud"></div><div class="lightning"><div class="bolt"></div><div class="bolt"></div></div></div><div id="03d" class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>',
+	'03n': '<div id="03n" class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>',
+	'04d': '<div id="04d" class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>',
+	'04n': '<div id="04n" class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>',
+	'02n': '<div id="02n" class="icon cloudy"><div class="cloud"></div><div class="cloud"></div></div>',
+	'13d': '<div id="13d" class="icon flurries"><div class="cloud"></div><div class="snow"><div class="flake"></div><div class="flake"></div></div></div>',
+	'13n': '<div id="13n" class="icon flurries"><div class="cloud"></div><div class="snow"><div class="flake"></div><div class="flake"></div></div></div>',
+	'01d': '<div id="01d" class="icon sunny"><div class="sun"><div class="rays"></div></div></div>',
+	'01n': '<div id="01n" class="icon sunny"><div class="sun"></div></div>',
+	'10d': '<div id="10d" class="icon rainy"><div class="cloud"></div><div class="rain"></div></div>',
+	'10n': '<div id="10n" class="icon rainy"><div class="cloud"></div><div class="rain"></div></div>'
+};
