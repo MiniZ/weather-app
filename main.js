@@ -2,7 +2,9 @@ document.onreadystatechange = () => {
 	if (document.readyState === 'complete') {
 	
 		initializeList();
-	
+		addBurgerMenuListener();
+		reloadView();
+		window.addEventListener("resize", reloadView);
 	}
 };
 
@@ -34,6 +36,57 @@ function initializeList() {
 	}
 	document.getElementById("city-list").innerHTML = text;
 	addEventListenerToCities();
+}
+
+function reloadView() {
+	if (window.innerWidth < 860) {
+		document.getElementById("menu").classList.add("hidden");
+		document.getElementById("logo").classList.add("transformed");
+		document.getElementById("logo-img").classList.add("transformed");
+		document.getElementById("logo-text").classList.add("transformed");
+		document.getElementById("overlay").style.width = '0';
+		document.getElementsByClassName('right-side')[0].style.width = '100%';
+	}
+}
+
+function updateView() {
+	if (window.innerWidth > 860) {
+			if (document.getElementById("menu").classList.contains("hidden")) {
+				document.getElementById("menu").classList.remove("hidden");
+				document.getElementById("logo").classList.remove("transformed");
+				document.getElementById("logo-img").classList.remove("transformed");
+				document.getElementById("logo-text").classList.remove("transformed");
+				document.getElementsByClassName('right-side')[0].style.width = 'calc(100% - 200px)'
+			} else {
+				document.getElementById("menu").classList.add("hidden");
+				document.getElementById("logo").classList.add("transformed");
+				document.getElementById("logo-img").classList.add("transformed");
+				document.getElementById("logo-text").classList.add("transformed");
+				document.getElementsByClassName('right-side')[0].style.width = '100%';
+			}
+		} else {
+			if (document.getElementById("menu").classList.contains("hidden")) {
+				document.getElementById("menu").classList.remove("hidden");
+				document.getElementById("logo").classList.remove("transformed");
+				document.getElementById("logo-img").classList.remove("transformed");
+				document.getElementById("logo-text").classList.remove("transformed");
+				document.getElementById("overlay").style.width = '100%';
+			} else {
+				document.getElementById("menu").classList.add("hidden");
+				document.getElementById("logo").classList.add("transformed");
+				document.getElementById("logo-img").classList.add("transformed");
+				document.getElementById("logo-text").classList.add("transformed");
+				document.getElementById("overlay").style.width = '0';
+				document.getElementsByClassName('right-side')[0].style.width = '100%';
+			}
+		}
+}
+
+function addBurgerMenuListener() {
+	var button = document.getElementById("burger-menu");
+	button.addEventListener('click', function(event) {
+		updateView();
+	}, false);
 }
 
 function addEventListenerToCities() {
@@ -97,7 +150,7 @@ function updateCityWeather(city) {
 		document.getElementById("main-temp_max").innerHTML = parseInt(weatherObj.main.temp_max);
 		document.getElementById("main-temp_min").innerHTML = parseInt(weatherObj.main.temp_min);
 		document.getElementById("weather-main").innerHTML = weatherObj.weather[0].main + ', ' + weatherObj.weather[0].description;
-		document.getElementById("big-animation").innerHTML = bigAnimations[weatherObj.weather[0].icon];
+		document.getElementById("big-animation").innerHTML = bigAnimations[weatherObj.weather[0].icon] == undefined ? bigAnimations['01d'] : bigAnimations[weatherObj.weather[0].icon];
 		document.getElementById("wind-deg").innerHTML = weatherObj.wind.deg;
 		document.getElementById("wind-speed").innerHTML = weatherObj.wind.speed;
 		setSunPhase(weatherObj.sys.sunrise * 1000, weatherObj.sys.sunset * 1000);
