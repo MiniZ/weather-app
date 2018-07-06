@@ -2,7 +2,6 @@ document.onreadystatechange = () => {
 	if (document.readyState === 'complete') {
 	
 		initializeList();
-		setHumidityLevel(78);
 	
 	}
 };
@@ -52,20 +51,15 @@ function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
   if ("withCredentials" in xhr) {
 
-    // Check if the XMLHttpRequest object has a "withCredentials" property.
-    // "withCredentials" only exists on XMLHTTPRequest2 objects.
     xhr.open(method, url, true);
 
   } else if (typeof XDomainRequest != "undefined") {
 
-    // Otherwise, check if XDomainRequest.
-    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
     xhr = new XDomainRequest();
     xhr.open(method, url);
 
   } else {
 
-    // Otherwise, CORS is not supported by the browser.
     xhr = null;
 
   }
@@ -84,8 +78,18 @@ function updateCityWeather(city) {
     }
 
     xhr.onload = function() {
-		var text = xhr.responseText;
-		console.log(text);
+		weatherObj = JSON.parse(xhr.responseText);
+		console.log(weatherObj);
+		document.getElementById("curr-city").innerHTML = weatherObj.name;
+		document.getElementById("main-temp").innerHTML = weatherObj.main.temp;
+		document.getElementById("main-temp_max").innerHTML = weatherObj.main.temp_max;
+		document.getElementById("main-temp_min").innerHTML = weatherObj.main.temp_min;
+		document.getElementById("weather-main").innerHTML = weatherObj.weather[0].main;
+		document.getElementById("wind-deg").innerHTML = weatherObj.wind.deg;
+		document.getElementById("wind-speed").innerHTML = weatherObj.wind.speed;
+		setSunPhase(weatherObj.sys.sunrise * 1000, weatherObj.sys.sunset * 1000);
+		setHumidityLevel(weatherObj.main.humidity);
+		
 	};
 
 	xhr.onerror = function() {
@@ -93,6 +97,56 @@ function updateCityWeather(city) {
 	};
 
 	xhr.send();
+}
+
+function setSunPhase(sunrise, sunset) {
+	var sunriseTime = new Date(weatherObj.sys.sunrise * 1000);
+	var sunsetTime = new Date(weatherObj.sys.sunset * 1000);
+	var currTime = new Date();
+	document.getElementById("sunrise").innerHTML = sunriseTime.getHours() + ":" + sunriseTime.getMinutes();
+	document.getElementById("sunset").innerHTML = sunsetTime.getHours() + ":" + sunsetTime.getMinutes();
+	var rotation = (currTime.getHours() - sunriseTime.getHours()) / (sunsetTime.getHours() - sunriseTime.getHours());
+	console.log(rotation);
+	var allDeg = 162;
+	document.getElementById("rotation").style.transform = 'rotate(' + ((allDeg * rotation) - 44) + 'deg)';
+}
+
+var weatherObj = {
+	coord: {lon: 44, lat: 41},
+	weather: [{
+		id:800,
+		main:"Clear",
+		description:"clear sky",
+		icon:"01d"
+	}],
+	base:"stations",
+	main:{
+		temp:31,
+		pressure:1007,
+		humidity:45,
+		temp_min:31,
+		temp_max:31
+		},
+	visibility: 10000,
+	wind: {
+		speed:7.7,
+		deg:310
+	},
+	clouds: {
+		all: 0
+	},
+	dt: 1530865800,
+	sys: {
+		type:1,
+		id:7217,
+		message:0.0024,
+		country:"GE",
+		sunrise:1530840779,
+		sunset:1530895076
+	},
+	id:611717,
+	name:"Tbilisi",
+	cod:200
 }
 
 var cities = ['Tbilisi',

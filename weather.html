@@ -15,15 +15,16 @@
 		<div class="right-side">
 			
 			<div class="center-container">
-				<div>Tbilisi</div>
-				<div class="f-55">23&#176;</div>
+				<div id="curr-city" class="f-25">Tbilisi</div>
+				<div class="f-55"><span id="main-temp">23</span>&#176;</div>
+				
 				<div class="icon sunny">
 				  <div class="sun">
 					<div class="rays"></div>
 				  </div>
 				</div>
-				<div>Sunny</div>
-				<div>35&#176; / 19&#176;</div>
+				<div id="weather-main" class="m-bottom-10 f-20">Sunny</div>
+				<div><span id="main-temp_max">35</span>&#176; / <span id="main-temp_min">19</span>&#176;</div>
 			</div>
 			
 			<div class="detailed-info">
@@ -162,8 +163,8 @@
 							<div class="small-mill"></div>
 						</div>
 						<div>
-							<div class="m-bottom-10"><span class="f-blue">Direction </span> Southeast</div>
-							<div class="m-bottom-10"><span class="f-blue">Speed </span> 12-28 km/h</div>
+							<div class="m-bottom-10"><span class="f-blue">Direction </span> <span id="wind-deg">300</span>&#176;</div>
+							<div class="m-bottom-10"><span class="f-blue">Speed </span> <span id="wind-speed">12-28</span> km/h</div>
 						</div>
 					</div>
 				</div>
@@ -172,12 +173,12 @@
 					<div class="section-title">Sunrise / Sunset</div>
 						<div class="sun-movement m-auto">
 							<div class="orbit">
-								<div class="custom-sun">
+								<div id="rotation" class="custom-sun">
 									<img class="inner" src="icons/01d.svg">
 								</div>
 							</div>
-							<div class="sunrise-time f-10">7:15 AM</div>
-							<div class="sunset-time f-10">7:06 PM</div>
+							<div id="sunrise" class="sunrise-time f-10">7:15 AM</div>
+							<div id="sunset" class="sunset-time f-10">7:06 PM</div>
 							
 						</div>
 					</div>
