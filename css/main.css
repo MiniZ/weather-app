@@ -245,14 +245,11 @@ html {
 	color: white;
 }
 
-.detailed-info > div {
-	margin-bottom: 10px;
-}
-
 .main-row {
     overflow: scroll;
     white-space: nowrap;
 	padding-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .row {
@@ -260,6 +257,7 @@ html {
 	justify-content: space-between;
 	border-bottom: 1px solid #4b72ac;
 	line-height: 64px;
+	margin-bottom: 10px;
 }
 
 .column {
