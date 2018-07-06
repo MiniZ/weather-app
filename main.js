@@ -49,6 +49,15 @@ function reloadView() {
 	}
 }
 
+function hideMenu() {
+	document.getElementById("menu").classList.add("hidden");
+	document.getElementById("logo").classList.add("transformed");
+	document.getElementById("logo-img").classList.add("transformed");
+	document.getElementById("logo-text").classList.add("transformed");
+	document.getElementById("overlay").style.width = '0';
+	document.getElementsByClassName('right-side')[0].style.width = '100%';
+}
+
 function updateView() {
 	if (window.innerWidth > 860) {
 			if (document.getElementById("menu").classList.contains("hidden")) {
@@ -100,6 +109,9 @@ function addEventListenerToCities() {
 			updateCityWeather(event.target.innerHTML);
 			update5DayWeather(event.target.innerHTML);
 			updateHourlyWeather(event.target.innerHTML);
+			if (window.innerWidth < 860) {
+				hideMenu();
+			}
 		}
 	}, false);
 }
