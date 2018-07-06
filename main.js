@@ -1,10 +1,25 @@
 document.onreadystatechange = () => {
-  if (document.readyState === 'complete') {
+	if (document.readyState === 'complete') {
 	
-	initializeList();
-
-  }
+		initializeList();
+		setHumidityLevel(78);
+	
+	}
 };
+
+function setHumidityLevel(perc) {
+	let deg = (perc * 280) / 100
+	var activeBorder = document.getElementById("activeBorder");
+	
+    if (deg<=140){
+        activeBorder.style.backgroundImage ='linear-gradient(' + (90+deg) + 'deg, transparent 50%, #A2ECFB 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)';
+    }
+    else{
+        activeBorder.style.backgroundImage = 'linear-gradient(' + (deg-90) + 'deg, transparent 50%, #39B4CC 50%),linear-gradient(90deg, #A2ECFB 50%, transparent 50%)';
+    }
+	
+	document.getElementById("perc").innerHTML = Math.round(perc)+"%";
+}
 
 function initializeList() {
 	var text = "";
